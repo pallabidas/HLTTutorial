@@ -103,46 +103,45 @@ class TriggerAnalyzerRAWMiniAOD : public edm::one::EDAnalyzer<edm::one::SharedRe
  
   TH1F* h_leadingJetPt;
   TH1F* h_L1SingleJet_den;
-  TH1F* h_L1SingleJet180_num;
-  TH1F* h_L1SingleJet90_num;
-  TH1F* h_L1boosted100_num;
-  TH1F* h_L1boosted120_num;
-  TH1F* h_L1boosted100_250_num;
-  TH1F* h_L1boosted120_250_num;
+
   TH1F* h_L1SingleJet180_num1;
   TH1F* h_L1SingleJet90_num1;
   TH1F* h_L1boosted100_num1;
   TH1F* h_L1boosted120_num1;
-  TH1F* h_L1boosted100_250_num1;
-  TH1F* h_L1boosted120_250_num1;
+
   TH1F* h_L1SingleJet180_num2;
   TH1F* h_L1SingleJet90_num2;
   TH1F* h_L1boosted100_num2;
   TH1F* h_L1boosted120_num2;
   TH1F* h_L1boosted100_250_num2;
   TH1F* h_L1boosted120_250_num2;
-  TH1F* h_L1DoubleJet150_num;
-  TH1F* h_L1DoubleJet112_num;
-  TH1F* h_L1DoubleJet_num;
-  TH1F* h_L1DoubleJet150_250_num;
-  TH1F* h_L1DoubleJet112_250_num;
-  TH1F* h_L1DoubleJet_250_num;
+
+  TH1F* h_L1SingleJet180_num3;
+  TH1F* h_L1SingleJet90_num3;
+  TH1F* h_L1boosted100_num3;
+  TH1F* h_L1boosted120_num3;
+  TH1F* h_L1boosted100_250_num3;
+  TH1F* h_L1boosted120_250_num3;
+
+  TH1F* h_L1SingleJet180_num4;
+  TH1F* h_L1SingleJet90_num4;
+  TH1F* h_L1boosted100_num4;
+  TH1F* h_L1boosted120_num4;
+  TH1F* h_L1boosted100_250_num4;
+  TH1F* h_L1boosted120_250_num4;
+
   TH1F* h_goodJetPt;
   TH1F* h_offlinePt;
-  TH1F* h_leadingJetPtL190_num;
-  TH1F* h_leadingJetPtL190_den;
-  TH1F* h_leadingJetPtL1180_num;
-  TH1F* h_leadingJetPtL1180_den;
-  TH1F* h_dR;
-  TH1F* h_dRAK4;
-  TH1F* h_dRAK8;
   TH1F* h_l1Pt35;
   TH1F* h_l1Pt90;
   TH1F* h_l1Pt180;
   TH1F* h_l1boosted100;
   TH1F* h_l1boosted120;
-  TH1F* h_hlt90;
-  TH1F* h_hlt180;
+
+  TH1F* h_HLT_AK8PFJet400_180;
+  TH1F* h_HLT_AK8PFJet400_90;
+  TH1F* h_HLT_AK8PFJet360_180;
+  TH1F* h_HLT_AK8PFJet360_90;
 };
 
 //
@@ -176,19 +175,10 @@ TriggerAnalyzerRAWMiniAOD::TriggerAnalyzerRAWMiniAOD(const edm::ParameterSet& iC
   h_leadingJetPt = fs->make<TH1F>("h_leadingJetPt","",40,0,500);
   h_L1SingleJet_den = fs->make<TH1F>("h_L1SingleJet_den","",40,0,500);
 
-  h_L1SingleJet180_num = fs->make<TH1F>("h_L1SingleJet180_num","",40,0,500);
-  h_L1SingleJet90_num = fs->make<TH1F>("h_L1SingleJet90_num","",40,0,500);
-  h_L1boosted100_num = fs->make<TH1F>("h_L1boosted100_num","",40,0,500);
-  h_L1boosted120_num = fs->make<TH1F>("h_L1boosted120_num","",40,0,500);
-  h_L1boosted100_250_num = fs->make<TH1F>("h_L1boosted100_250_num","",40,0,500);
-  h_L1boosted120_250_num = fs->make<TH1F>("h_L1boosted120_250_num","",40,0,500);
-
   h_L1SingleJet180_num1 = fs->make<TH1F>("h_L1SingleJet180_num1","",40,0,500);
   h_L1SingleJet90_num1 = fs->make<TH1F>("h_L1SingleJet90_num1","",40,0,500);
   h_L1boosted100_num1 = fs->make<TH1F>("h_L1boosted100_num1","",40,0,500);
   h_L1boosted120_num1 = fs->make<TH1F>("h_L1boosted120_num1","",40,0,500);
-  h_L1boosted100_250_num1 = fs->make<TH1F>("h_L1boosted100_250_num1","",40,0,500);
-  h_L1boosted120_250_num1 = fs->make<TH1F>("h_L1boosted120_250_num1","",40,0,500);
 
   h_L1SingleJet180_num2 = fs->make<TH1F>("h_L1SingleJet180_num2","",40,0,500);
   h_L1SingleJet90_num2 = fs->make<TH1F>("h_L1SingleJet90_num2","",40,0,500);
@@ -197,29 +187,31 @@ TriggerAnalyzerRAWMiniAOD::TriggerAnalyzerRAWMiniAOD(const edm::ParameterSet& iC
   h_L1boosted100_250_num2 = fs->make<TH1F>("h_L1boosted100_250_num2","",40,0,500);
   h_L1boosted120_250_num2 = fs->make<TH1F>("h_L1boosted120_250_num2","",40,0,500);
 
-  h_L1DoubleJet150_num = fs->make<TH1F>("h_L1DoubleJet150_num","",40,0,500);
-  h_L1DoubleJet112_num = fs->make<TH1F>("h_L1DoubleJet112_num","",40,0,500);
-  h_L1DoubleJet_num = fs->make<TH1F>("h_L1DoubleJet_num","",40,0,500);
-  h_L1DoubleJet150_250_num = fs->make<TH1F>("h_L1DoubleJet150_250_num","",40,0,500);
-  h_L1DoubleJet112_250_num = fs->make<TH1F>("h_L1DoubleJet112_250_num","",40,0,500);
-  h_L1DoubleJet_250_num = fs->make<TH1F>("h_L1DoubleJet_250_num","",40,0,500);
+  h_L1SingleJet180_num3 = fs->make<TH1F>("h_L1SingleJet180_num3","",40,0,500);
+  h_L1SingleJet90_num3 = fs->make<TH1F>("h_L1SingleJet90_num3","",40,0,500);
+  h_L1boosted100_num3 = fs->make<TH1F>("h_L1boosted100_num3","",40,0,500);
+  h_L1boosted120_num3 = fs->make<TH1F>("h_L1boosted120_num3","",40,0,500);
+  h_L1boosted100_250_num3 = fs->make<TH1F>("h_L1boosted100_250_num3","",40,0,500);
+  h_L1boosted120_250_num3 = fs->make<TH1F>("h_L1boosted120_250_num3","",40,0,500);
+
+  h_L1SingleJet180_num4 = fs->make<TH1F>("h_L1SingleJet180_num4","",40,0,500);
+  h_L1SingleJet90_num4 = fs->make<TH1F>("h_L1SingleJet90_num4","",40,0,500);
+  h_L1boosted100_num4 = fs->make<TH1F>("h_L1boosted100_num4","",40,0,500);
+  h_L1boosted120_num4 = fs->make<TH1F>("h_L1boosted120_num4","",40,0,500);
+  h_L1boosted100_250_num4 = fs->make<TH1F>("h_L1boosted100_250_num4","",40,0,500);
+  h_L1boosted120_250_num4 = fs->make<TH1F>("h_L1boosted120_250_num4","",40,0,500);
 
   h_goodJetPt = fs->make<TH1F>("h_goodJetPt","",40,0,500);
   h_offlinePt = fs->make<TH1F>("h_offlinePt","",40,0,500);
-  h_leadingJetPtL190_den = fs->make<TH1F>("h_leadingJetPtL190_den","",40,200,500);
-  h_leadingJetPtL190_num = fs->make<TH1F>("h_leadingJetPtL190_num","",40,200,500);
-  h_leadingJetPtL1180_den = fs->make<TH1F>("h_leadingJetPtL1180_den","",40,200,500);
-  h_leadingJetPtL1180_num = fs->make<TH1F>("h_leadingJetPtL1180_num","",40,200,500);
-  h_dR = fs->make<TH1F>("h_dR","",40,0,0.5);
-  h_dRAK4 = fs->make<TH1F>("h_dRAK4","",40,0,0.5);
-  h_dRAK8 = fs->make<TH1F>("h_dRAK8","",40,0,0.5);
   h_l1Pt35 = fs->make<TH1F>("h_l1Pt35","",40,0,500);
   h_l1Pt90 = fs->make<TH1F>("h_l1Pt90","",40,0,500);
   h_l1Pt180 = fs->make<TH1F>("h_l1Pt180","",40,0,500);
   h_l1boosted100 = fs->make<TH1F>("h_l1boosted100","",40,0,500);
   h_l1boosted120 = fs->make<TH1F>("h_l1boosted120","",40,0,500);
-  h_hlt90 = fs->make<TH1F>("h_hlt90","",40,0,500);
-  h_hlt180 = fs->make<TH1F>("h_hlt180","",40,0,500);
+  h_HLT_AK8PFJet400_180 = fs->make<TH1F>("h_HLT_AK8PFJet400_180","",40,0,500);
+  h_HLT_AK8PFJet400_90 = fs->make<TH1F>("h_HLT_AK8PFJet400_90","",40,0,500);
+  h_HLT_AK8PFJet360_180 = fs->make<TH1F>("h_HLT_AK8PFJet360_180","",40,0,500);
+  h_HLT_AK8PFJet360_90 = fs->make<TH1F>("h_HLT_AK8PFJet360_90","",40,0,500);
 }
 
 
@@ -243,9 +235,9 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
    using namespace reco;
    using namespace std;
 
-//   bool passHLT_AK8PFJet400_TrimMass30(false); 
-//   bool passHLT_AK8PFJet400_TrimMass30_L190(false);
-//   bool passHLT_AK8PFJet400_TrimMass30_L135(false);
+   bool passHLT_AK8PFJet400_TrimMass30(false);
+   bool passHLT_AK8PFJet400_TrimMass30_L190(false);
+   bool passHLT_AK8PFJet400_TrimMass30_L1boosted(false);
    bool passHLT_AK8PFJet360_TrimMass30(false);
    bool passHLT_AK8PFJet360_TrimMass30_L190(false);
    bool passHLT_AK8PFJet360_TrimMass30_L1boosted(false);
@@ -258,15 +250,9 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
    bool passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L190(false);
    bool passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L1boosted(false);
    bool passHLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_L1boosted(false);
-   bool passHLT_AK8PFJet360_TrimMass30_L1DoubleJet150(false);
-   bool passHLT_AK8PFJet360_TrimMass30_L1DoubleJet112(false);
-   bool passHLT_AK8PFJet360_TrimMass30_L1DoubleJet(false);
-   bool passHLT_AK8PFJet250_TrimMass30_L1DoubleJet150(false);
-   bool passHLT_AK8PFJet250_TrimMass30_L1DoubleJet112(false);
-   bool passHLT_AK8PFJet250_TrimMass30_L1DoubleJet(false);
-   bool passL1SingleJet180(false);
-   bool passL1SingleJet90(false);
    bool passL1SingleJet35(false);
+   bool passL1SingleJet90(false);
+   bool passL1SingleJet180(false);
    bool passL1boosted100(false);
    bool passL1boosted120(false);
 
@@ -301,22 +287,6 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
    }
    if(l1JetsSorted.size() > 1){  std::sort(l1JetsSorted.begin(),l1JetsSorted.end(),compareByPt);}
 
-   //if(seeds.size() > 0 && l1JetsSorted.size() > 0){
-   //   for(auto seed : seeds){
-   //      if(seed.pt() > 30.) {
-   //         for(auto jet : l1JetsSorted){
-   //            if(abs(jet.eta()) < 2.5 && deltaR(jet.eta(), jet.phi(), seed.eta(), seed.phi()) < 0.4){
-   //               h_dR->Fill(deltaR(jet.eta(), jet.phi(), seed.eta(), seed.phi()));
-   //               if(jet.pt()*1.2 > 100.) { passL1boosted100 = true; h_l1boosted100->Fill(jet.pt()*1.2); }
-   //               if(jet.pt()*1.2 > 120.) { passL1boosted120 = true; h_l1boosted120->Fill(jet.pt()*1.2); }
-   //            }
-   //         }
-   //      }
-   //   }
-   //}
-
-   //if(!passL1boosted100) h_dR->Fill(0.45);
-
    //Accessing trigger bits:
    //This works in both RAW, AOD or MINIAOD 
    //Here we access the decision provided by the HLT (i.e. original trigger step). 
@@ -330,8 +300,7 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
        if (trigResults.product()->accept(i_Trig)) {
 	 TString TrigPath =trigName.triggerName(i_Trig);
 	 //cout << "Passed path: " << TrigPath<<endl;
-	 //if(TrigPath.Index("HLT_IsoMu24_v") >=0) passHLT_IsoMu24=true; 
-	 //if(TrigPath.Index("HLT_AK8PFJet400_TrimMass30_v") >= 0) passHLT_AK8PFJet400_TrimMass30 = true;
+	 if(TrigPath.Index("HLT_AK8PFJet400_TrimMass30_v") >= 0) passHLT_AK8PFJet400_TrimMass30 = true;
 	 if(TrigPath.Index("HLT_AK8PFJet360_TrimMass30_v") >= 0) passHLT_AK8PFJet360_TrimMass30 = true;
          if(TrigPath.Index("HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np2_v") >= 0) passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB = true;
          if(TrigPath.Index("HLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_p17_v") >= 0) passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV = true;
@@ -349,8 +318,8 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
      for( int i_Trig = 0; i_Trig < N_Triggers; ++i_Trig ) {
        if (trigResultsHLT2.product()->accept(i_Trig)) {
 	 TString TrigPath =trigName.triggerName(i_Trig);
-	 //if(TrigPath.Index("HLT_AK8PFJet400_TrimMass30_L190_v") >= 0) passHLT_AK8PFJet400_TrimMass30_L190 = true;
-         //if(TrigPath.Index("HLT_AK8PFJet400_TrimMass30_L135") >= 0) passHLT_AK8PFJet400_TrimMass30_L135 = true;
+	 if(TrigPath.Index("HLT_AK8PFJet400_TrimMass30_L190_v") >= 0) passHLT_AK8PFJet400_TrimMass30_L190 = true;
+         if(TrigPath.Index("HLT_AK8PFJet400_TrimMass30_L1boosted_v") >= 0) passHLT_AK8PFJet400_TrimMass30_L1boosted = true;
          if(TrigPath.Index("HLT_AK8PFJet360_TrimMass30_L190_v") >= 0) passHLT_AK8PFJet360_TrimMass30_L190 = true;
          if(TrigPath.Index("HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np2_L190_v") >= 0) passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L190 = true;
          if(TrigPath.Index("HLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_p17_L190_v") >= 0) passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L190 = true;
@@ -360,14 +329,6 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
          if(TrigPath.Index("HLT_AK8PFJet250_TrimMass30_L1boosted_v") >= 0) passHLT_AK8PFJet250_TrimMass30_L1boosted = true;
          if(TrigPath.Index("HLT_AK8PFJet250_TrimMass30_PFAK8BoostedDoubleB_np2_L1boosted_v") >= 0) passHLT_AK8PFJet250_TrimMass30_PFAK8BoostedDoubleB_L1boosted = true;
          if(TrigPath.Index("HLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_p17_L1boosted_v") >= 0) passHLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_L1boosted = true;
-         //if(TrigPath.Index("HLT_L1180") >= 0) passL1SingleJet180 = true;
-         //if(TrigPath.Index("HLT_L190") >= 0) passL1SingleJet90 = true;
-         if(TrigPath.Index("HLT_AK8PFJet360_TrimMass30_DoubleJet150_v") >= 0) passHLT_AK8PFJet360_TrimMass30_L1DoubleJet150 = true;
-         if(TrigPath.Index("HLT_AK8PFJet360_TrimMass30_DoubleJet112_v") >= 0) passHLT_AK8PFJet360_TrimMass30_L1DoubleJet112 = true;
-         if(TrigPath.Index("HLT_AK8PFJet360_TrimMass30_DoubleJet_v") >= 0) passHLT_AK8PFJet360_TrimMass30_L1DoubleJet = true;
-         if(TrigPath.Index("HLT_AK8PFJet250_TrimMass30_DoubleJet150_v") >= 0) passHLT_AK8PFJet250_TrimMass30_L1DoubleJet150 = true;
-         if(TrigPath.Index("HLT_AK8PFJet250_TrimMass30_DoubleJet112_v") >= 0) passHLT_AK8PFJet250_TrimMass30_L1DoubleJet112 = true;
-         if(TrigPath.Index("HLT_AK8PFJet250_TrimMass30_DoubleJet_v") >= 0) passHLT_AK8PFJet250_TrimMass30_L1DoubleJet = true;
        }
      }
    }
@@ -391,14 +352,13 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
        if(myfillabl=="hltL1sSingleJet35"){
          for(auto jet : l1JetsSorted){
            if(abs(jet.eta()) < 2.5 && deltaR(jet.eta(), jet.phi(), obj.eta(), obj.phi()) < 0.4){
-             if(jet.pt()*1.2 > 100.) { passL1boosted100 = true; h_l1boosted100->Fill(jet.pt()*1.2); }
-             if(jet.pt()*1.2 > 120.) { passL1boosted120 = true; h_l1boosted120->Fill(jet.pt()*1.2); }
+             if(jet.pt()*1.25 > 100.) { passL1boosted100 = true; h_l1boosted100->Fill(jet.pt()*1.25); } // a scale factor for L1boosted jet pT
+             if(jet.pt()*1.25 > 120.) { passL1boosted120 = true; h_l1boosted120->Fill(jet.pt()*1.25); }
            }
          }
        }
      }
    }
-   if(!passL1boosted100) h_dR->Fill(0.45);
  
    edm::Handle< std::vector<pat::Jet> > jets;
    iEvent.getByToken(jet_token,jets);
@@ -413,16 +373,11 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
    double leadingjetak8pt = -100.; // leading AK8 jet
    double goodjetpt = -100.; // leading AK8 jet with exactly two subjets and at least one b hadron
    bool hasSoftDropMass40 = false;
-   bool hasSubjets90 = false;
-   bool hasSubjets180 = false;
 
    if(iEvent.getByToken(jetak8_token, jetsak8)){
      for (const pat::Jet &jet : *jetsak8) {
        double softDropMass = jet.userFloat("ak8PFJetsPuppiSoftDropMass");
-       //if(softDropMass > 40.) { hasSoftDropMass40 = true; } 
-       if(!hasSoftDropMass40 && softDropMass > 40. && abs(jet.eta()) < 2.5 && reco::deltaR(jet, genHiggs) < 0.4) { hasSoftDropMass40 = true;  leadingjetak8pt = jet.pt(); }
-       if(jet.pt() > 90. && jet.subjets("SoftDropPuppi").size() == 2 && jet.jetFlavourInfo().getbHadrons().size() > 1) { hasSubjets90 = true; }
-       if(jet.pt() > 180. && jet.subjets("SoftDropPuppi").size() == 2 && jet.jetFlavourInfo().getbHadrons().size() > 1) { hasSubjets180 = true; }
+       if(!hasSoftDropMass40 && softDropMass > 40. && abs(jet.eta()) < 2.5 && reco::deltaR(jet, genHiggs) < 0.4) { hasSoftDropMass40 = true;  leadingjetak8pt = jet.pt(); } // leading AK8 jet within central region matched to gen Higgs
        if(jet.subjets("SoftDropPuppi").size() ==  2 && jet.jetFlavourInfo().getbHadrons().size() > 1){
          goodJetsAK8.push_back(jet);
        }
@@ -430,32 +385,32 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
    }
 
    if((*jets).size() > 0) { leadingjetpt = (*jets).at(0).pt(); } // leading AK4 jet
-	   //if((*jetsak8).size() > 0) { leadingjetak8pt = (*jetsak8).at(0).pt(); } // leading AK8 jet
-	   if(goodJetsAK8.size() > 0) { goodjetpt = goodJetsAK8.at(0).pt(); } // leading AK8 jet having 2 subjets and at leat 2 b hadrons
+   if(goodJetsAK8.size() > 0) { goodjetpt = goodJetsAK8.at(0).pt(); } // leading AK8 jet having 2 subjets and at leat 2 b hadrons
 
-	//   //Accessing the trigger objects in RAW/AOD
-	//   edm::Handle<trigger::TriggerEvent> triggerObjectsSummary;
-	//   iEvent.getByToken(trigobjectsRAWToken_ ,triggerObjectsSummary);
-	//
-	//   trigger::TriggerObjectCollection selectedObjects;
-	//   if (triggerObjectsSummary.isValid()) {
-	//     size_t filterIndex = (*triggerObjectsSummary).filterIndex( edm::InputTag("hltL1sSingleJet180") );
-	//     trigger::TriggerObjectCollection allTriggerObjects = triggerObjectsSummary->getObjects();
-	//     if (filterIndex < (*triggerObjectsSummary).sizeFilters()) { 
-	//       const trigger::Keys &keys = (*triggerObjectsSummary).filterKeys(filterIndex);
-	//       for (size_t j = 0; j < keys.size(); j++) {
-	//         trigger::TriggerObject foundObject = (allTriggerObjects)[keys[j]];
-	//         h_l1Pt180->Fill(foundObject.pt());
-	//       }
-	//     }
-	//     size_t filterIndex1 = (*triggerObjectsSummary).filterIndex( edm::InputTag("hltL1sSingleJet90") );
-	//     if (filterIndex1 < (*triggerObjectsSummary).sizeFilters()) {
-	//       const trigger::Keys &keys = (*triggerObjectsSummary).filterKeys(filterIndex1);
-	//       for (size_t j = 0; j < keys.size(); j++) {
-	//         trigger::TriggerObject foundObject = (allTriggerObjects)[keys[j]];
-	//         h_l1Pt90->Fill(foundObject.pt());
-	//         for(auto jet : l1JetsSorted){
-	//           if(reco::deltaR(jet, foundObject)<0.4){
+
+//	   //Accessing the trigger objects in RAW/AOD
+//	   edm::Handle<trigger::TriggerEvent> triggerObjectsSummary;
+//	   iEvent.getByToken(trigobjectsRAWToken_ ,triggerObjectsSummary);
+//	
+//	   trigger::TriggerObjectCollection selectedObjects;
+//	   if (triggerObjectsSummary.isValid()) {
+//	     size_t filterIndex = (*triggerObjectsSummary).filterIndex( edm::InputTag("hltL1sSingleJet180") );
+//	     trigger::TriggerObjectCollection allTriggerObjects = triggerObjectsSummary->getObjects();
+//	     if (filterIndex < (*triggerObjectsSummary).sizeFilters()) { 
+//	       const trigger::Keys &keys = (*triggerObjectsSummary).filterKeys(filterIndex);
+//	       for (size_t j = 0; j < keys.size(); j++) {
+//	         trigger::TriggerObject foundObject = (allTriggerObjects)[keys[j]];
+//	         h_l1Pt180->Fill(foundObject.pt());
+//	       }
+//	     }
+//	     size_t filterIndex1 = (*triggerObjectsSummary).filterIndex( edm::InputTag("hltL1sSingleJet90") );
+//	     if (filterIndex1 < (*triggerObjectsSummary).sizeFilters()) {
+//	       const trigger::Keys &keys = (*triggerObjectsSummary).filterKeys(filterIndex1);
+//	       for (size_t j = 0; j < keys.size(); j++) {
+//	         trigger::TriggerObject foundObject = (allTriggerObjects)[keys[j]];
+//	         h_l1Pt90->Fill(foundObject.pt());
+//	         for(auto jet : l1JetsSorted){
+//	           if(reco::deltaR(jet, foundObject)<0.4){
 //             if(jet.pt() > 100.) passL1boosted100 = true;
 //             if(jet.pt() > 140.) passL1boosted140 = true;
 //           }
@@ -464,84 +419,72 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
 //     }
 //   }
 
-   h_leadingJetPt->Fill(leadingjetpt);
+   if(leadingjetpt > 0) h_leadingJetPt->Fill(leadingjetpt);
    if(goodjetpt > 0) { h_goodJetPt->Fill(goodjetpt); }
 
 //// For finding efficiency of HLT paths by changing L1 seed
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40) { h_L1SingleJet_den->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40) { h_L1SingleJet_den->Fill(leadingjetak8pt); }   // this is the common denominator, following are different nymerator histograms for different paths
+
+//// HLT_AK8PFJet400_TrimMass30
+
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet400_TrimMass30) { h_L1SingleJet180_num1->Fill(leadingjetak8pt); }
+
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet400_TrimMass30_L190) { h_L1SingleJet90_num1->Fill(leadingjetak8pt); }
+
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet400_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_num1->Fill(leadingjetak8pt); }
+
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet400_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_num1->Fill(leadingjetak8pt); }
 
 //// HLT_AK8PFJet360_TrimMass30
 
-   //if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet400_TrimMass30) { h_L1SingleJet180_num->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30) { h_L1SingleJet180_num->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30) { h_L1SingleJet180_num2->Fill(leadingjetak8pt); }
 
-   //if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet400_TrimMass30_L190) { h_L1SingleJet90_num->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L190) { h_L1SingleJet90_num->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L190) { h_L1SingleJet90_num2->Fill(leadingjetak8pt); }
 
-   //if(leadingjetak8pt > 0 && hasSoftDropMass40 && passL1boosted100 && passHLT_AK8PFJet400_TrimMass30_L135) { h_L1boosted100_num->Fill(leadingjetak8pt); }
-   //if(leadingjetak8pt > 0 && hasSoftDropMass40 && passL1boosted100) { h_L1boosted100_num->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_250_num->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_num->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_250_num2->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_num2->Fill(leadingjetak8pt); }
 
-   //if(leadingjetak8pt > 0 && hasSoftDropMass40 && passL1boosted140 && passHLT_AK8PFJet400_TrimMass30_L135) { h_L1boosted140_num->Fill(leadingjetak8pt); }
-   //if(leadingjetak8pt > 0 && hasSoftDropMass40 && passL1boosted140) { h_L1boosted140_num->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_250_num->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_num->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_250_num2->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_num2->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L1DoubleJet150) { h_L1DoubleJet150_num->Fill(leadingjetak8pt); }
-
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L1DoubleJet112) { h_L1DoubleJet112_num->Fill(leadingjetak8pt); }
-
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L1DoubleJet) { h_L1DoubleJet_num->Fill(leadingjetak8pt); }
-
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_L1DoubleJet150) { h_L1DoubleJet150_250_num->Fill(leadingjetak8pt); }
-
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_L1DoubleJet112) { h_L1DoubleJet112_250_num->Fill(leadingjetak8pt); }
-
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_L1DoubleJet) { h_L1DoubleJet_250_num->Fill(leadingjetak8pt); }
 
 //// HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np2
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB) { h_L1SingleJet180_num1->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB) { h_L1SingleJet180_num3->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L190) { h_L1SingleJet90_num1->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L190) { h_L1SingleJet90_num3->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted100) { h_L1boosted100_250_num1->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted100) { h_L1boosted100_250_num3->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted100) { h_L1boosted100_num1->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted100) { h_L1boosted100_num3->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted120) { h_L1boosted120_250_num1->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted120) { h_L1boosted120_250_num3->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted120) { h_L1boosted120_num1->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted120) { h_L1boosted120_num3->Fill(leadingjetak8pt); }
 
 
 //// HLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_p17
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV) { h_L1SingleJet180_num2->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV) { h_L1SingleJet180_num4->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L190) { h_L1SingleJet90_num2->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L190) { h_L1SingleJet90_num4->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted100) { h_L1boosted100_250_num2->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted100) { h_L1boosted100_250_num4->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted100) { h_L1boosted100_num2->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted100) { h_L1boosted100_num4->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted120) { h_L1boosted120_250_num2->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted120) { h_L1boosted120_250_num4->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted120) { h_L1boosted120_num2->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted120) { h_L1boosted120_num4->Fill(leadingjetak8pt); }
 
 
 //// For finding the rates of the HLT paths
-   //if(leadingjetak8pt > 0 && passHLT_AK8PFJet400_TrimMass30) { h_hlt180->Fill(leadingjetak8pt); }
-   //if(leadingjetak8pt > 0 && passHLT_AK8PFJet400_TrimMass30_L190) { h_hlt90->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && passHLT_AK8PFJet360_TrimMass30) { h_hlt180->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && passHLT_AK8PFJet360_TrimMass30_L190) { h_hlt90->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && passHLT_AK8PFJet400_TrimMass30) { h_HLT_AK8PFJet400_180->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && passHLT_AK8PFJet400_TrimMass30_L190) { h_HLT_AK8PFJet400_90->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && passHLT_AK8PFJet360_TrimMass30) { h_HLT_AK8PFJet360_180->Fill(leadingjetak8pt); }
+   if(leadingjetak8pt > 0 && passHLT_AK8PFJet360_TrimMass30_L190) { h_HLT_AK8PFJet360_90->Fill(leadingjetak8pt); }
 
-//// For finding the L1 efficincies
-   if(hasSubjets90 && passL1SingleJet90) { h_leadingJetPtL190_num->Fill(goodjetpt); }
-   if(hasSubjets90) { h_leadingJetPtL190_den->Fill(goodjetpt); }
-   if(hasSubjets180 && passL1SingleJet180) { h_leadingJetPtL1180_num->Fill(goodjetpt); }
-   if(hasSubjets180) { h_leadingJetPtL1180_den->Fill(goodjetpt); }
 }
 
 
