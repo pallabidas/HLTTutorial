@@ -19,7 +19,7 @@ voms-proxy-init --voms cms --valid 168:00
 Clone this repository, and compile (N.B. some unused variables in the code introduce warnings)
 
 ```
-git clone -b test_July1 git@github.com:pallabidas/HLTTutorial.git
+git clone -b 2021_July1 git@github.com:pallabidas/HLTTutorial.git
 scram b -j 12
 ```
 Move to HLTrigger/Configuration/test
