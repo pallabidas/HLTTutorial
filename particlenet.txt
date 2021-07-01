@@ -1,0 +1,203 @@
+#####
+#Adding AK4 PF jet collection
+#####
+fragment.hltAK4PFJets = cms.EDProducer( "FastjetJetProducer",
+Active_Area_Repeats = cms.int32( 5 ),
+useMassDropTagger = cms.bool( False ),
+doAreaFastjet = cms.bool( False ),
+muMin = cms.double( -1.0 ),
+Ghost_EtaMax = cms.double( 6.0 ),
+maxBadHcalCells = cms.uint32( 9999999 ),
+maxRecoveredHcalCells = cms.uint32( 9999999 ),
+applyWeight = cms.bool( False ),
+doAreaDiskApprox = cms.bool( True ),
+subtractorName = cms.string( "" ),
+dRMax = cms.double( -1.0 ),
+useExplicitGhosts = cms.bool( False ),
+puWidth = cms.double( 0.0 ),
+maxRecoveredEcalCells = cms.uint32( 9999999 ),
+R0 = cms.double( -1.0 ),
+jetType = cms.string( "PFJet" ),
+muCut = cms.double( -1.0 ),
+subjetPtMin = cms.double( -1.0 ),
+csRParam = cms.double( -1.0 ),
+MinVtxNdof = cms.int32( 0 ),
+minSeed = cms.uint32( 0 ),
+voronoiRfact = cms.double( -9.0 ),
+doRhoFastjet = cms.bool( False ),
+jetAlgorithm = cms.string( "AntiKt" ),
+writeCompound = cms.bool( False ),
+muMax = cms.double( -1.0 ),
+nSigmaPU = cms.double( 1.0 ),
+GhostArea = cms.double( 0.01 ),
+Rho_EtaMax = cms.double( 4.4 ),
+restrictInputs = cms.bool( False ),
+nExclude = cms.uint32( 0 ),
+yMin = cms.double( -1.0 ),
+srcWeights = cms.InputTag( "" ),
+maxBadEcalCells = cms.uint32( 9999999 ),
+jetCollInstanceName = cms.string( "" ),
+useFiltering = cms.bool( False ),
+maxInputs = cms.uint32( 1 ),
+rFiltFactor = cms.double( -1.0 ),
+useDeterministicSeed = cms.bool( True ),
+doPVCorrection = cms.bool( False ),
+rFilt = cms.double( -1.0 ),
+yMax = cms.double( -1.0 ),
+zcut = cms.double( -1.0 ),
+useTrimming = cms.bool( False ),
+puCenters = cms.vdouble( ),
+MaxVtxZ = cms.double( 15.0 ),
+rParam = cms.double( 0.4 ),
+csRho_EtaMax = cms.double( -1.0 ),
+UseOnlyVertexTracks = cms.bool( False ),
+dRMin = cms.double( -1.0 ),
+gridSpacing = cms.double( -1.0 ),
+minimumTowersFraction = cms.double( 0.0 ),
+doFastJetNonUniform = cms.bool( False ),
+usePruning = cms.bool( False ),
+maxDepth = cms.int32( -1 ),
+yCut = cms.double( -1.0 ),
+useSoftDrop = cms.bool( False ),
+DzTrVtxMax = cms.double( 0.0 ),
+UseOnlyOnePV = cms.bool( False ),
+maxProblematicHcalCells = cms.uint32( 9999999 ),
+correctShape = cms.bool( False ),
+rcut_factor = cms.double( -1.0 ),
+src = cms.InputTag( "hltParticleFlow" ),
+gridMaxRapidity = cms.double( -1.0 ),
+sumRecHits = cms.bool( False ),
+jetPtMin = cms.double( 0.0 ),
+puPtMin = cms.double( 10.0 ),
+useDynamicFiltering = cms.bool( False ),
+verbosity = cms.int32( 0 ),
+inputEtMin = cms.double( 0.0 ),
+useConstituentSubtraction = cms.bool( False ),beta = cms.double( -1.0 ),
+trimPtFracMin = cms.double( -1.0 ),
+radiusPU = cms.double( 0.4 ),
+nFilt = cms.int32( -1 ),
+useKtPruning = cms.bool( False ),
+DxyTrVtxMax = cms.double( 0.0 ),
+maxProblematicEcalCells = cms.uint32( 9999999 ),
+srcPVs = cms.InputTag( "hltPixelVertices" ),
+useCMSBoostedTauSeedingAlgorithm = cms.bool( False ),
+doPUOffsetCorr = cms.bool( False ),
+writeJetsWithConst = cms.bool( False ),
+inputEMin = cms.double( 0.0 )
+)
+
+fragment.hltAK4PFJetsTightID = cms.EDProducer( "HLTPFJetIDProducer",
+CEF = cms.double( 0.99 ),
+NHF = cms.double( 0.9 ),
+minPt = cms.double( 20.0 ),
+CHF = cms.double( 0.0 ),
+jetsInput = cms.InputTag( "hltAK4PFJets" ),
+NEF = cms.double( 0.99 ),
+NTOT = cms.int32( 1 ),
+NCH = cms.int32( 0 ),
+maxEta = cms.double( 1.0E99 ),
+maxCF = cms.double( 99.0 )
+)
+fragment.hltAK4PFFastJetCorrector = cms.EDProducer( "L1FastjetCorrectorProducer",
+srcRho = cms.InputTag( "hltFixedGridRhoFastjetAll" ),
+algorithm = cms.string( "AK4PFHLT" ),
+level = cms.string( "L1FastJet" )
+)
+fragment.hltAK4PFRelativeCorrector = cms.EDProducer( "LXXXCorrectorProducer",
+algorithm = cms.string( "AK4PFHLT" ),
+level = cms.string( "L2Relative" )
+)
+fragment.hltAK4PFAbsoluteCorrector = cms.EDProducer( "LXXXCorrectorProducer",
+algorithm = cms.string( "AK4PFHLT" ),
+level = cms.string( "L3Absolute" )
+)
+fragment.hltAK4PFResidualCorrector = cms.EDProducer( "LXXXCorrectorProducer",
+algorithm = cms.string( "AK4PFHLT" ),
+level = cms.string( "L2L3Residual" )
+)
+fragment.hltAK4PFCorrector = cms.EDProducer( "ChainedJetCorrectorProducer",
+correctors = cms.VInputTag( 'hltAK4PFFastJetCorrector','hltAK4PFRelativeCorrector','hltAK4PFAbsoluteCorrector','hltAK4PFResidualCorrector' )
+)
+fragment.hltAK4PFJetsTightIDCorrected = cms.EDProducer( "CorrectedPFJetProducer",
+src = cms.InputTag( "hltAK4PFJetsTightID" ),
+correctors = cms.VInputTag( 'hltAK4PFCorrector' )
+)
+
+fragment.hltPFJetForBtagSelectorParticleNet = cms.EDFilter( "HLT1PFJet",
+saveTags = cms.bool( True ),
+MinPt = cms.double( 25 ),
+MinN = cms.int32( 1 ),
+MaxEta = cms.double( 2.5 ),
+MinEta = cms.double( -1.0 ),
+MinMass = cms.double( -1.0 ),
+inputTag = cms.InputTag( "hltAK4PFJetsTightIDCorrected" ),
+MinE = cms.double( -1.0 ),
+triggerType = cms.int32( 86 ),
+MaxMass = cms.double( -1.0 )
+)
+
+fragment.hltPFJetForBtagParticleNet = cms.EDProducer( "HLTPFJetCollectionProducer",
+TriggerTypes = cms.vint32( 86 ),
+HLTObject = cms.InputTag( "hltPFJetForBtagSelectorParticleNet" )
+)
+
+##### (a)
+from PhysicsTools.PatAlgos.slimming.primaryVertexAssociation_cfi import primaryVertexAssociation
+fragment.hltPrimaryVertexAssociation = primaryVertexAssociation.clone()
+fragment.hltPrimaryVertexAssociation.particles = cms.InputTag("hltParticleFlow")
+fragment.hltPrimaryVertexAssociation.vertices = cms.InputTag("hltVerticesPFFilter")
+#fragment.hltPrimaryVertexAssociation.jets = cms.InputTag("hltPFJetForBtagAK8")
+fragment.hltPrimaryVertexAssociation.jets = cms.InputTag("hltPFJetForBtagParticleNet")
+
+##### (b)
+fragment.hltParticleNetOfflineBJetTagsInfos = cms.EDProducer("DeepBoostedJetTagInfoProducer",
+    jet_radius = cms.double(0.8),
+    min_jet_pt = cms.double(330.),
+    max_jet_eta = cms.double(2.5),
+    min_pt_for_track_properties = cms.double(0.95),
+    min_pt_for_pfcandidates = cms.double(0.1),
+    use_hlt_features = cms.bool(False),
+    use_puppiP4 = cms.bool(False),
+    include_neutrals = cms.bool(True),
+    sort_by_sip2dsig = cms.bool(False),
+    min_puppi_wgt = cms.double(-1.),
+    flip_ip_sign = cms.bool(False),
+    sip3dSigMax = cms.double(-1),
+    vertices = cms.InputTag('hltVerticesPFFilter'),
+    secondary_vertices = cms.InputTag('hltDeepInclusiveMergedVerticesPF'),
+    pf_candidates = cms.InputTag('hltParticleFlow'),
+    jets = cms.InputTag("hltPFJetForBtagAK8"),
+    puppi_value_map = cms.InputTag(""),
+    vertex_associator = cms.InputTag('hltPrimaryVertexAssociation', 'original'),
+    mightGet = cms.optional.untracked.vstring
+)
+
+##### (c)
+fragment.hltParticleNetONNXJetTags = cms.EDProducer('BoostedJetONNXJetTagsProducer',
+    src = cms.InputTag("hltParticleNetOfflineBJetTagsInfos"),
+    preprocess_json = cms.string('RecoBTag/Combined/data/ParticleNetAK8/MD-2prong/V01/preprocess.json'),
+    preprocessParams = cms.PSet(),
+    model_path = cms.FileInPath('RecoBTag/Combined/data/ParticleNetAK8/MD-2prong/V01/particle-net.onnx'),
+    flav_names = cms.vstring("probXbb", "probXcc", "probXqq", "probQCDbb", "probQCDcc","probQCDb", "probQCDc", "probQCDothers"),
+    debugMode = cms.untracked.bool(False),
+    mightGet = cms.optional.untracked.vstring
+)
+
+##### (d)
+fragment.hltParticleNetDiscriminatorsJetTags = cms.EDProducer("BTagProbabilityToDiscriminator",
+    discriminators = cms.VPSet(
+        cms.PSet(
+        denominator = cms.VInputTag(
+            cms.InputTag("hltParticleNetONNXJetTags","probQCDothers"),
+            cms.InputTag("hltParticleNetONNXJetTags","probQCDc"),
+            cms.InputTag("hltParticleNetONNXJetTags","probQCDb"),
+            cms.InputTag("hltParticleNetONNXJetTags","probQCDcc"),
+            cms.InputTag("hltParticleNetONNXJetTags","probQCDbb"),
+            cms.InputTag("hltParticleNetONNXJetTags","probXbb")),
+        name = cms.string('XbbvsQCD'),
+        numerator = cms.VInputTag(
+            cms.InputTag("hltParticleNetONNXJetTags","probXbb")),
+        )
+    )
+)
+
