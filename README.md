@@ -3,11 +3,12 @@
 ## Setup
 Setup the release, import HLTrigger package, compile
 ```
-cmsrel CMSSW_10_6_1_patch3 
-cd CMSSW_10_6_1_patch3/src
+cmsrel CMSSW_11_2_0
+cd CMSSW_11_2_0/src
 cmsenv
+git cms-merge-topic pallabidas:l1t-integration-test-17May
 git cms-addpkg HLTrigger/Configuration
-scram b -j 8
+scram b -j 12
 ```
 Creat a proxy (to access remote files) 
 
@@ -18,8 +19,8 @@ voms-proxy-init --voms cms --valid 168:00
 Clone this repository, and compile (N.B. some unused variables in the code introduce warnings)
 
 ```
-git clone https://github.com/lathomas/HLTTutorial.git
-USER_CXXFLAGS="-Wno-delete-non-virtual-dtor -Wno-error=unused-but-set-variable -Wno-error=unused-variable" scram b
+git clone -b test_July1 git@github.com:pallabidas/HLTTutorial.git
+scram b -j 12
 ```
 Move to HLTrigger/Configuration/test
 
@@ -30,35 +31,26 @@ cd HLTrigger/Configuration/test
 Now, fetch the needed trigger configuration associated to the B-tagged Jet + soft muon path: 
 
 ```
-hltGetConfiguration --cff --offline /dev/CMSSW_10_6_0/GRun --paths HLTriggerFirstPath,HLTriggerFinalPath --unprescale > HLT_TutoEffcySession_cff.py
-hltGetConfiguration --cff /users/lathomas/HLTTuto2019/HLTTuto/V5   \
---globaltag auto:run2_hlt_GRun   \
---unprescale >> HLT_TutoEffcySession_cff.py
+hltGetConfiguration --cff --offline /dev/CMSSW_11_2_0/GRun --paths HLTriggerFirstPath,HLTriggerFinalPath --unprescale > HLT_6AprV5_cff.py
+hltGetConfiguration --cff /users/pdas/Tutorial2019/6Apr/AK8JetPath/V5 \
+--globaltag auto:run3_mc_GRun   \
+--unprescale >> HLT_6AprV5_cff.py
+```
+ You then need to modify HLT_6AprV5_cff.py : search for these two lines, they appear twice in the config file. Comment out their second appearance (not the first one). 
  ```
- You then need to modify HLT_TutoEffcySession_cff.py : search for these two lines, they appear twice in the config file. Comment out their second appearance (not the first one). 
- ```
-#/users/HLTTutoOct2017/ExamplePath/Mu3Jet200Btag/V1 (CMSSW_9_2_10)   (already commented)                                                                                                                                       
+#/users/pdas/Tutorial2019/6Apr/AK8JetPath/V5 (CMSSW_11_2_0)   (already commented)                                                                                                                                       
 #import FWCore.ParameterSet.Config as cms                                                                                                                                                                   
 #fragment = cms.ProcessFragment( "HLT" )  
  ```
- 
- We will also play a bit with the usual single electron path, we therefore need a config for that one too. 
-```
-hltGetConfiguration --cff /dev/CMSSW_10_6_0/GRun   \
---globaltag auto:run2_hlt_GRun   \
---path HLTriggerFirstPath,HLTriggerFinalPath,HLT_Ele35_WPTight_Gsf_v9 \
---unprescale > HLT_TutoEle35WPTight_cff.py
-```
   
 Copy the files to the python subdirectory
 ```
-cp HLT_TutoEffcySession_cff.py ../python/.
-cp HLT_TutoEle35WPTight_cff.py  ../python/.
+cp HLT_6AprV5_cff.py ../python/.
 ```
 
  Produce a HLT2_HLT.py config file to be run with cmsRun HLT2_HLT.py. We will need to rerun HLT using RAW data and and then access offline information from MINIAOD. In order to do that, we need to specify the MINIAOD file as the main input file and the list of all its parent RAW files as secondary input files: 
 ```
-cmsDriver.py HLT2 --step=HLT:TutoEffcySession --era=Run2_2018 --data --conditions auto:run2_hlt_GRun --filein root://cms-xrd-global.cern.ch//store/data/Run2018D/SingleMuon/MINIAOD/22Jan2019-v2/110000/6307D2AA-47CD-A849-9F7F-DD2D6D183E5E.root --secondfilein file:root://cms-xrd-global.cern.ch//store/data/Run2018D/SingleMuon/RAW/v1/000/321/164/00000/BAF0A515-439E-E811-838D-02163E019F14.root,root://cms-xrd-global.cern.ch//store/data/Run2018D/SingleMuon/RAW/v1/000/321/164/00000/407FB415-439E-E811-9977-FA163E2FE09D.root,root://cms-xrd-global.cern.ch//store/data/Run2018D/SingleMuon/RAW/v1/000/321/164/00000/00833922-439E-E811-9D43-02163E01A04C.root --processName=HLT2 -n 100 --no_exec 
+cmsDriver.py HLT2 --step=HLT:6AprV5 --era=Run3  --mc --conditions auto:run3_mc_GRun --filein file:/hdfs/store/user/pdas/Run3_ggHBB/MiniAOD/RunIIAutumn18MiniAOD_part0_75764563_75769863.root  --secondfilein file:/hdfs/store/user/pdas/Run3_ggHBB/DR/RunIIAutumn18DRPremix_step1_part0_75764563_75769863.root  --processName=HLT2 -n 10 --no_exec
 ```
 
 
@@ -75,13 +67,22 @@ process.TFileService = cms.Service("TFileService",
                                    )
 process.demo_step = cms.EndPath(process.demo)
 ```
+For running L1boosted emulator, add:
+```
+process.load('L1Trigger.Configuration.SimL1Emulator_cff')
+process.load('L1Trigger.Configuration.CaloTriggerPrimitives_cff')
+process.load('EventFilter.L1TXRawToDigi.caloLayer1Stage2Digis_cfi')
+process.load(‘L1Trigger.L1TCaloLayer1.uct2016EmulatorDigis_cfi’)
+
+process.rawtodigi = cms.EndPath(process.l1tCaloLayer1Digis * process.uct2016EmulatorDigis)
+```
 Replace the line:
 ```
 process.schedule.extend([process.endjob_step,process.RECOSIMoutput_step])
 ```
 by:
 ```
-process.schedule.extend([process.endjob_step, process.demo_step])
+process.schedule.extend([process.endjob_step, process.rawtodigi, process.demo_step])
 ```
 N.B.: Keeping RECOSIMoutput_step in the process would create an updated (big!) RAW file 
 with the information related to the trigger menu you reran. 
@@ -93,36 +94,4 @@ edmDumpEventContent --regex HLT HLT2_HLT.root
 Test the code: 
 ```
 cmsRun HLT2_HLT.py 
-```
-
-## Exercices
-
-All the code (and exercises) related to this tutorial is to be found in:
-https://github.com/lathomas/HLTTutorial/blob/master/TriggerAnalyzerRAWMiniAOD/plugins/TriggerAnalyzerRAWMiniAOD.cc
-
-You will need to modify this file and compile (in CMSSW_9_2_12/src). The exercises are inserted as comments in this EDAnalyzer. After each modification of the analyzer, do: 
-```
-cd $CMSSW_BASE/src
-USER_CXXFLAGS="-Wno-delete-non-virtual-dtor -Wno-error=unused-but-set-variable -Wno-error=unused-variable" scram b -j 6
-cd HLTrigger/Configuration/test
-cmsRun HLT2_HLT.py
-```
-
-There are six exercises: 
-
-
- - Exercise 1: learn how to access the trigger decision (boolean) associated to any path (in RAW, AOD, MINIAOD).
- - Exercise 2: learn how to access the trigger objects stored in MINIAOD.
- - Exercise 3: learn how to access the trigger objects stored in RAW.
- - Exercise 4: perform an efficiency measurement and define a proper denominator. NB: switch "maxEvents" to 10000 instead of 100 for exercise 4. (this may take some time...)
- - Exercise 5: Check some efficiency plots similar to those obtained in ex 4 but with higher stats, study some interesting behaviours.
- - Exercise 6: Perform a measurement using Tag and Probe with dielectron events and access the HLT variables used in the various filters associated to a single electron path. One can process 1000 events in this exercise. 
-
-In exercises 4,5, 6 you will need to produce efficiency by dividing histograms stored in the output file (out.root). 
-```
-root -l out.root
-> demo->cd()
-> .L DivideHistos.C
-> .ls //Optional line to show all the histos in your root file
->  DivideHistos(h_num,h_den) //First argument is the numerator histo, second is the denominator
 ```
