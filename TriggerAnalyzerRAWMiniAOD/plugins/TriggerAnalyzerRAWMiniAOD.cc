@@ -137,11 +137,6 @@ class TriggerAnalyzerRAWMiniAOD : public edm::one::EDAnalyzer<edm::one::SharedRe
   TH1F* h_l1Pt180;
   TH1F* h_l1boosted100;
   TH1F* h_l1boosted120;
-
-  TH1F* h_HLT_AK8PFJet400_180;
-  TH1F* h_HLT_AK8PFJet400_90;
-  TH1F* h_HLT_AK8PFJet360_180;
-  TH1F* h_HLT_AK8PFJet360_90;
 };
 
 //
@@ -208,10 +203,6 @@ TriggerAnalyzerRAWMiniAOD::TriggerAnalyzerRAWMiniAOD(const edm::ParameterSet& iC
   h_l1Pt180 = fs->make<TH1F>("h_l1Pt180","",40,0,500);
   h_l1boosted100 = fs->make<TH1F>("h_l1boosted100","",40,0,500);
   h_l1boosted120 = fs->make<TH1F>("h_l1boosted120","",40,0,500);
-  h_HLT_AK8PFJet400_180 = fs->make<TH1F>("h_HLT_AK8PFJet400_180","",40,0,500);
-  h_HLT_AK8PFJet400_90 = fs->make<TH1F>("h_HLT_AK8PFJet400_90","",40,0,500);
-  h_HLT_AK8PFJet360_180 = fs->make<TH1F>("h_HLT_AK8PFJet360_180","",40,0,500);
-  h_HLT_AK8PFJet360_90 = fs->make<TH1F>("h_HLT_AK8PFJet360_90","",40,0,500);
 }
 
 
@@ -372,7 +363,7 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
    double leadingjetpt = -100.; // leading AK4 jet
    double leadingjetak8pt = -100.; // leading AK8 jet
    double goodjetpt = -100.; // leading AK8 jet with exactly two subjets and at least one b hadron
-   bool hasSoftDropMass40 = false;
+   bool hasSoftDropMass40(false);
 
    if(iEvent.getByToken(jetak8_token, jetsak8)){
      for (const pat::Jet &jet : *jetsak8) {
@@ -411,8 +402,8 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
 //	         h_l1Pt90->Fill(foundObject.pt());
 //	         for(auto jet : l1JetsSorted){
 //	           if(reco::deltaR(jet, foundObject)<0.4){
-//             if(jet.pt() > 100.) passL1boosted100 = true;
-//             if(jet.pt() > 140.) passL1boosted140 = true;
+//             if(jet.pt()*1.25 > 100.) passL1boosted100 = true;
+//             if(jet.pt()*1.25 > 120.) passL1boosted120 = true;
 //           }
 //         }
 //       }
@@ -424,67 +415,65 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
 
 //// For finding efficiency of HLT paths by changing L1 seed
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40) { h_L1SingleJet_den->Fill(leadingjetak8pt); }   // this is the common denominator, following are different nymerator histograms for different paths
+   if(leadingjetak8pt > 0) {
+
+     h_L1SingleJet_den->Fill(leadingjetak8pt); // this is the common denominator
 
 //// HLT_AK8PFJet400_TrimMass30
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet400_TrimMass30) { h_L1SingleJet180_num1->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet400_TrimMass30) { h_L1SingleJet180_num1->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet400_TrimMass30_L190) { h_L1SingleJet90_num1->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet400_TrimMass30_L190) { h_L1SingleJet90_num1->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet400_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_num1->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet400_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_num1->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet400_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_num1->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet400_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_num1->Fill(leadingjetak8pt); }
 
 //// HLT_AK8PFJet360_TrimMass30
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30) { h_L1SingleJet180_num2->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet360_TrimMass30) { h_L1SingleJet180_num2->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L190) { h_L1SingleJet90_num2->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet360_TrimMass30_L190) { h_L1SingleJet90_num2->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_250_num2->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_num2->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet250_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_250_num2->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_250_num2->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet360_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_num2->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet360_TrimMass30_L1boosted && passL1boosted100) { h_L1boosted100_num2->Fill(leadingjetak8pt); }
+
+     if(passHLT_AK8PFJet250_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_250_num2->Fill(leadingjetak8pt); }
+
+     if(passHLT_AK8PFJet360_TrimMass30_L1boosted && passL1boosted120) { h_L1boosted120_num2->Fill(leadingjetak8pt); }
 
 
 //// HLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_np2
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB) { h_L1SingleJet180_num3->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB) { h_L1SingleJet180_num3->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L190) { h_L1SingleJet90_num3->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L190) { h_L1SingleJet90_num3->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted100) { h_L1boosted100_250_num3->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet250_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted100) { h_L1boosted100_250_num3->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted100) { h_L1boosted100_num3->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted100) { h_L1boosted100_num3->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted120) { h_L1boosted120_250_num3->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet250_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted120) { h_L1boosted120_250_num3->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted120) { h_L1boosted120_num3->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet330_TrimMass30_PFAK8BoostedDoubleB_L1boosted && passL1boosted120) { h_L1boosted120_num3->Fill(leadingjetak8pt); }
 
 
 //// HLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_p17
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV) { h_L1SingleJet180_num4->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV) { h_L1SingleJet180_num4->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L190) { h_L1SingleJet90_num4->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L190) { h_L1SingleJet90_num4->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted100) { h_L1boosted100_250_num4->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted100) { h_L1boosted100_250_num4->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted100) { h_L1boosted100_num4->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted100) { h_L1boosted100_num4->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted120) { h_L1boosted120_250_num4->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet250_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted120) { h_L1boosted120_250_num4->Fill(leadingjetak8pt); }
 
-   if(leadingjetak8pt > 0 && hasSoftDropMass40 && passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted120) { h_L1boosted120_num4->Fill(leadingjetak8pt); }
+     if(passHLT_AK8PFJet330_TrimMass30_PFAK8BTagDeepCSV_L1boosted && passL1boosted120) { h_L1boosted120_num4->Fill(leadingjetak8pt); }
 
-
-//// For finding the rates of the HLT paths
-   if(leadingjetak8pt > 0 && passHLT_AK8PFJet400_TrimMass30) { h_HLT_AK8PFJet400_180->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && passHLT_AK8PFJet400_TrimMass30_L190) { h_HLT_AK8PFJet400_90->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && passHLT_AK8PFJet360_TrimMass30) { h_HLT_AK8PFJet360_180->Fill(leadingjetak8pt); }
-   if(leadingjetak8pt > 0 && passHLT_AK8PFJet360_TrimMass30_L190) { h_HLT_AK8PFJet360_90->Fill(leadingjetak8pt); }
-
+   }
 }
 
 
